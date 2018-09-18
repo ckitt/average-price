@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Query Average Price</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1 class="display-4">Average Price</h1>
+        <p class="lead">Query the average for the last X prices</p>
+        <hr class="my-4">
+        <form class="form-inline">
+            <label class="sr-only" for="inlineFormInputName2">X</label>
+            <input type="number" class="form-control mb-2 mr-sm-2" id="input-x" placeholder="X">
+
+            <button type="button" class="btn btn-primary mb-2" id="searchAveragePrices">Go</button>
+        </form>
+        <div id="averageComponent" style="display: none">
+            <hr class="my-4">
+            <p class="lead">The average price is <span id="averagePrice"></span></p>
+        </div>
+        <div id="error" style="display: none">
+            <hr class="my-4">
+            <p class="lead" id="errorMsg"></p>
+        </div>
+    </div>
+</div>
+
+<style>
+body {
+    padding: 50px;
+}
+#errorMsg {
+    color: #f00;
+}
+</style>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script>
+(function () {
+    $("#searchAveragePrices").click(function (e) {
+        var input = $("#input-x").val();
+        var inputValue = parseInt(input);
+        $("#averageComponent").hide();
+        $("#error").hide();
+        $.get("/price/average/" + inputValue, function(data) {
+            if (data && data.averagePrice) {
+                $("#averagePrice").html(data.averagePrice);
+                $("#averageComponent").show();
+            } else {
+                $("#errorMsg").html(data.message);
+                $("#error").show();
+            }
+        })
+    });
+}());
+</script>
+</body>
+</html>

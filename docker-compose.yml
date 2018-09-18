@@ -1,0 +1,57 @@
+version: '2'
+services:
+    zookeeper:
+        image: wurstmeister/zookeeper
+        container_name: zookeeper
+        ports:
+         - "2181:2181"
+    kafka:
+        image: wurstmeister/kafka
+        container_name: kafka
+        ports:
+         - "9092:9092"
+        depends_on:
+        - zookeeper
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: kafka
+            KAFKA_CREATE_TOPICS: "priceUpdated:1:1"
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    influxdb:
+        image: influxdb:latest
+        container_name: influxdb
+        ports:
+         - "8083:8083"
+         - "8086:8086"
+         - "8090:8090"
+        volumes:
+         - ./volumes/influxdb:/var/lib/influxdb
+    consumer:
+        container_name: consumer
+        build: ./price-consumer
+        working_dir: /app
+        volumes:
+         - ./price-consumer:/app
+         - ~/.m2:/root/.m2
+        ports:
+         - "8081:8081"
+        depends_on:
+         - kafka
+         - influxdb
+        links:
+         - kafka:kafka
+         - influxdb:influxdb
+        command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
+    producer:
+        restart: always
+        container_name: producer
+        build: ./price-producer
+        working_dir: /app
+        volumes:
+         - ./price-producer:/app
+         - ~/.m2:/root/.m2
+        depends_on:
+         - kafka
+         - consumer
+        links:
+         - kafka:kafka
+        command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker

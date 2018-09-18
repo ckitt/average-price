@@ -1,0 +1,27 @@
+version: '2'
+services:
+    zookeeper:
+        image: wurstmeister/zookeeper
+        container_name: zookeeper
+        ports:
+         - "2181:2181"
+    kafka:
+        image: wurstmeister/kafka
+        container_name: kafka
+        ports:
+         - "9092:9092"
+        depends_on:
+        - zookeeper
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+            KAFKA_CREATE_TOPICS: "priceUpdated:1:1"
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    influxdb:
+        image: influxdb:latest
+        container_name: influxdb
+        ports:
+         - "8083:8083"
+         - "8086:8086"
+         - "8090:8090"
+        volumes:
+         - ./volumes/influxdb:/var/lib/influxdb
