@@ -14,6 +14,7 @@ docker-compose version 1.22.0, build f46880fe
 ```
 $ docker-compose up
 ```
+3. Access the application in local environment with `http://localhost:8081`
 
 ## Further Impromvements
 1. ~~Influxdb query for the average X price~~
