@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+
+  influxdb:
+    url: http://influxdb:8086

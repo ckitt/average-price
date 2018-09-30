@@ -1,0 +1,18 @@
+server:
+  port: 8082
+
+logging:
+  level:
+    root: WARN
+    com.averageprice.consumer: DEBUG
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: priceUpdate
+
+  influxdb:
+    url: http://127.0.0.1:8086
+    username: root
+    password: root

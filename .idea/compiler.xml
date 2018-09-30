@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
         <module name="price-consumer" />
         <module name="price-producer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="average-price" target="1.6" />
+      <module name="average-price" target="1.8" />
+      <module name="config-server" target="1.8" />
       <module name="price-consumer" target="1.8" />
       <module name="price-producer" target="1.8" />
     </bytecodeTargetLevel>

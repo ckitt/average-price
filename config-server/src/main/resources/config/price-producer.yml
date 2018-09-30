@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    root: WARN
+    com.averageprice.producer: DEBUG
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: priceUpdate

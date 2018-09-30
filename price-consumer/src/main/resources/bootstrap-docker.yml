@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: docker
+  cloud:
+    config:
+      uri: http://configserver:8888

@@ -25,6 +25,16 @@ services:
          - "8090:8090"
         volumes:
          - ./volumes/influxdb:/var/lib/influxdb
+    configserver:
+        container_name: configserver
+        build: ./config-server
+        working_dir: /app
+        volumes:
+         - ./config-server:/app
+         - ~/.m2:/root/.m2
+        ports:
+         - "8888:8888"
+        command: mvn clean spring-boot:run
     consumer:
         container_name: consumer
         build: ./price-consumer
@@ -33,11 +43,13 @@ services:
          - ./price-consumer:/app
          - ~/.m2:/root/.m2
         ports:
-         - "8081:8081"
+         - "8082:8082"
         depends_on:
+         - configserver
          - kafka
          - influxdb
         links:
+         - configserver:configserver
          - kafka:kafka
          - influxdb:influxdb
         command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
@@ -50,8 +62,10 @@ services:
          - ./price-producer:/app
          - ~/.m2:/root/.m2
         depends_on:
+         - configserver
          - kafka
          - consumer
         links:
+         - configserver:configserver
          - kafka:kafka
         command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
