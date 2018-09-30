@@ -1,9 +1,9 @@
 spring:
-  profiles:
-    active: docker
+  application:
+    name: price-producer
   cloud:
     config:
-      uri: http://configserver:8888
+      uri: http://localhost:8888
       fail-fast: true
       retry:
         initial-interval: 1000
